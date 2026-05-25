@@ -1,2 +1,2 @@
-[php] 
-version = "8.2" 
+[variables] 
+PHP_VERSION = "8.2" 

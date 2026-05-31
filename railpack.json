@@ -1,6 +1,6 @@
 {
-  "buildAptPackages": ["bison", "re2c", "libcurl4-openssl-dev", "libssl-dev", "libxml2-dev", "libsqlite3-dev"],
+  "buildAptPackages": ["libcurl4-openssl-dev", "libssl-dev", "libxml2-dev", "libsqlite3-dev"],
   "packages": {
-    "php": "8.2"
+    "php": "8.2.28"
   }
 }

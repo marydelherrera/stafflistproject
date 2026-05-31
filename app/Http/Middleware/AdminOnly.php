@@ -13,11 +13,6 @@ class AdminOnly
             return redirect('/login')->with('error', 'Please login first');
         }
 
-        $user = session('user');
-
-        if ($user['role'] !== 'admin') {
-            return redirect('/staff/dashboard')->with('error', 'Unauthorized access');
-        }
 
         return $next($request);
     }

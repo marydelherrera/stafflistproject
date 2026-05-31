@@ -11,29 +11,16 @@
 
         @if(session('user')['role'] === 'admin')
             <a href="/admin/dashboard" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-                <i class="bi bi-bar-chart"></i> Overview
+                <i class="bi bi-bar-chart"></i> Dashboard
             </a>
-            <a href="/users" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
+            <a href="/admin/users" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
                 <i class="bi bi-people"></i> Staff List
-            </a>
-            <a href="/projects" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-                <i class="bi bi-briefcase"></i> Projects
-            </a>
-        @else
-            <a href="/staff/dashboard" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-                <i class="bi bi-house"></i> My Dashboard
-            </a>
-            <a href="/staff/tasks" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-                <i class="bi bi-list-check"></i> My Tasks
             </a>
         @endif
 
         <div style="font-size: 10px; color: #a06080; margin-top: 20px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;">ACCOUNT</div>
         <a href="/profile" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: #f7dce8;">
             <i class="bi bi-person"></i> Profile
-        </a>
-        <a href="/settings" class="btn btn-sm w-100 text-start" style="color: #a04070; background: transparent;">
-            <i class="bi bi-gear"></i> Settings
         </a>
     </div>
 
@@ -105,23 +92,6 @@
                         <div class="mb-3">
                             <label class="form-label" style="color: #a04070; font-weight: 600;">Email Address</label>
                             <input type="email" name="email" class="form-control" value="{{ session('user')['email'] }}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" style="color: #a04070; font-weight: 600;">Phone</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="+63 900 000 0000">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" style="color: #a04070; font-weight: 600;">Department</label>
-                            <select name="department" class="form-control">
-                                <option value="">Select Department</option>
-                                <option>Human Resources</option>
-                                <option>Finance</option>
-                                <option>Marketing</option>
-                                <option>Operations</option>
-                                <option>Technology</option>
-                            </select>
                         </div>
 
                         <div style="text-align: right;">

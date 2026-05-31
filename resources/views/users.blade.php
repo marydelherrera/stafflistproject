@@ -9,21 +9,15 @@
 
         <div style="font-size: 10px; color: #a06080; margin-top: 15px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;">MAIN</div>
         <a href="/admin/dashboard" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-            <i class="bi bi-bar-chart"></i> Overview
+            <i class="bi bi-bar-chart"></i> Dashboard
         </a>
-        <a href="/users" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: #f7dce8;">
+        <a href="/admin/users" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: #f7dce8;">
             <i class="bi bi-people"></i> Staff List
-        </a>
-        <a href="/projects" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
-            <i class="bi bi-briefcase"></i> Projects
         </a>
 
         <div style="font-size: 10px; color: #a06080; margin-top: 20px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;">ACCOUNT</div>
         <a href="/profile" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
             <i class="bi bi-person"></i> Profile
-        </a>
-        <a href="/settings" class="btn btn-sm w-100 text-start" style="color: #a04070; background: transparent;">
-            <i class="bi bi-gear"></i> Settings
         </a>
     </div>
 
@@ -94,7 +88,7 @@
                             <td>
                                 <button class="btn btn-sm btn-outline-primary"
                                     data-bs-toggle="modal" data-bs-target="#editUserModal"
-                                    onclick="editUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->email }}')">
+                                    onclick="editUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->email }}', '{{ $user->role }}')">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
                                 <button class="btn btn-sm btn-outline-danger" onclick="deleteUser({{ $user->id }})">
@@ -133,6 +127,14 @@
                     <input type="email" id="addEmail" class="form-control" required>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select id="addRole" class="form-control" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Password</label>
                     <input type="password" id="addPassword" class="form-control" required>
                 </div>
@@ -166,6 +168,13 @@
                     <label class="form-label">Email</label>
                     <input type="email" id="editEmail" class="form-control" required>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select id="editRole" class="form-control" required>
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -178,10 +187,11 @@
 <script>
     let currentUserId = null;
 
-    function editUser(id, name, email) {
+    function editUser(id, name, email, role) {
         currentUserId = id;
         document.getElementById('editName').value  = name;
         document.getElementById('editEmail').value = email;
+        document.getElementById('editRole').value  = role;
     }
 
     function handleEditUser() {
@@ -191,8 +201,9 @@
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('fullname', document.getElementById('editName').value);
         formData.append('email',    document.getElementById('editEmail').value);
+        formData.append('role',     document.getElementById('editRole').value);
 
-        fetch(`/users/${currentUserId}/update`, {
+        fetch(`/admin/users/${currentUserId}/update`, {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -213,10 +224,11 @@
     function handleAddUser() {
         const fullname = document.getElementById('addFullname').value.trim();
         const email    = document.getElementById('addEmail').value.trim();
+        const role     = document.getElementById('addRole').value;
         const password = document.getElementById('addPassword').value;
         const confirm  = document.getElementById('addPasswordConfirm').value;
 
-        if (!fullname || !email || !password) {
+        if (!fullname || !email || !role || !password) {
             showToast('All fields are required.', 'error');
             return;
         }
@@ -229,10 +241,11 @@
         formData.append('_token',               '{{ csrf_token() }}');
         formData.append('fullname',             fullname);
         formData.append('email',                email);
+        formData.append('role',                 role);
         formData.append('password',             password);
         formData.append('password_confirmation', confirm);
 
-        fetch('/users', {
+        fetch('/admin/users', {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -254,7 +267,7 @@
         if (confirm('Are you sure you want to delete this staff member?')) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = `/users/${id}/delete`;
+            form.action = `/admin/users/${id}/delete`;
             form.innerHTML = `@csrf`;
             document.body.appendChild(form);
             form.submit();

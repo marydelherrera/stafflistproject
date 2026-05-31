@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // ── Admin: Staff List ─────────────────────────────────────────────
-
     public function userstable()
     {
         $users = User::all();
@@ -22,6 +20,7 @@ class UserController extends Controller
             $validated = $request->validate([
                 'fullname' => 'required|min:2|max:255',
                 'email'    => 'required|email|unique:users',
+                'role'     => 'required|in:admin,staff',
                 'password' => 'required|min:6|confirmed',
             ]);
 
@@ -29,7 +28,7 @@ class UserController extends Controller
                 'name'     => $validated['fullname'],
                 'email'    => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role'     => 'staff',
+                'role'     => $validated['role'],
             ]);
 
             return response()->json(['success' => true, 'message' => 'Staff member added successfully!']);
@@ -47,11 +46,13 @@ class UserController extends Controller
             $validated = $request->validate([
                 'fullname' => 'required|min:2|max:255',
                 'email'    => 'required|email|unique:users,email,' . $id,
+                'role'     => 'required|in:admin,staff',
             ]);
 
             $user->update([
                 'name'  => $validated['fullname'],
                 'email' => $validated['email'],
+                'role'  => $validated['role'],
             ]);
 
             return response()->json(['success' => true, 'message' => 'Staff member updated successfully!']);
@@ -66,8 +67,6 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
         return back()->with('success', 'Staff member deleted successfully!');
     }
-
-    // ── Profile (any authenticated user) ─────────────────────────────
 
     public function showProfile()
     {
@@ -87,7 +86,6 @@ class UserController extends Controller
 
             $user->update($validated);
 
-            // Refresh the session so the navbar shows the updated name/email
             session(['user' => [
                 'id'    => $user->id,
                 'name'  => $user->name,

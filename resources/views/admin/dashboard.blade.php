@@ -5,27 +5,19 @@
 
     {{-- ─── SIDEBAR ─────────────────────────────────────────── --}}
     <div style="width: 230px; background: #f3c9d9; padding: 20px; overflow-y: auto; flex-shrink: 0;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #a04070; margin-bottom: 30px; font-weight: 600;">
-            Sakura
-        </div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #a04070; margin-bottom: 30px; font-weight: 600;">Sakura</div>
 
         <div style="font-size: 10px; color: #a06080; margin-top: 15px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;">MAIN</div>
         <a href="/admin/dashboard" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: #f7dce8;">
-    <i class="bi bi-bar-chart"></i> Overview
+            <i class="bi bi-bar-chart"></i> Dashboard
         </a>
         <a href="/admin/users" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
             <i class="bi bi-people"></i> Staff List
-        </a>
-        <a href="/admin/projects" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070;">
-            <i class="bi bi-briefcase"></i> Projects
         </a>
 
         <div style="font-size: 10px; color: #a06080; margin-top: 20px; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;">ACCOUNT</div>
         <a href="/profile" class="btn btn-sm w-100 text-start mb-2" style="color: #a04070; background: transparent;">
             <i class="bi bi-person"></i> Profile
-        </a>
-        <a href="/admin/settings" class="btn btn-sm w-100 text-start" style="color: #a04070; background: transparent;">
-            <i class="bi bi-gear"></i> Settings
         </a>
     </div>
 
@@ -40,7 +32,7 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="badge" style="background: #d4608a; color: #fff; font-size: 11px; padding: 6px 12px; border-radius: 20px;">
+                <span class="badge" style="background: #f3c9d9; color: #a04070; font-size: 11px; padding: 6px 12px; border-radius: 20px;">
                     <i class="bi bi-shield-check"></i> Admin
                 </span>
                 <a href="/profile" class="btn btn-sm" style="background: #f3c9d9; color: #a04070;">
@@ -81,52 +73,27 @@
 
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div style="font-size: 12px; color: #c07090; font-weight: 600;">TOTAL PROJECTS</div>
-                    <h3 style="color: #a04070; font-size: 2.5rem; margin: 10px 0;">{{ $projects->count() }}</h3>
-                    <div style="font-size: 12px; color: #c07090;">All projects</div>
+                    <div style="font-size: 12px; color: #c07090; font-weight: 600;">ADMINS</div>
+                    <h3 style="color: #a04070; font-size: 2.5rem; margin: 10px 0;">{{ $users->where('role', 'admin')->count() }}</h3>
+                    <div style="font-size: 12px; color: #c07090;">Administrator accounts</div>
                 </div>
             </div>
 
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div style="font-size: 12px; color: #c07090; font-weight: 600;">ACTIVE PROJECTS</div>
-                    <h3 style="color: #a04070; font-size: 2.5rem; margin: 10px 0;">{{ $projects->where('status', 'active')->count() }}</h3>
-                    <div style="font-size: 12px; color: #c07090;">Currently running</div>
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div style="font-size: 12px; color: #c07090; font-weight: 600;">COMPLETED</div>
-                    <h3 style="color: #a04070; font-size: 2.5rem; margin: 10px 0;">{{ $projects->where('status', 'completed')->count() }}</h3>
-                    <div style="font-size: 12px; color: #c07090;">Finished projects</div>
+                    <div style="font-size: 12px; color: #c07090; font-weight: 600;">STAFF MEMBERS</div>
+                    <h3 style="color: #a04070; font-size: 2.5rem; margin: 10px 0;">{{ $users->where('role', 'staff')->count() }}</h3>
+                    <div style="font-size: 12px; color: #c07090;">Regular staff</div>
                 </div>
             </div>
         </div>
 
-        {{-- CHARTS --}}
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 style="color: #a04070; font-weight: 600;">Staff Distribution</h5>
-                    <canvas id="staffChart"></canvas>
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 style="color: #a04070; font-weight: 600;">Projects by Status</h5>
-                    <canvas id="projectChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        {{-- RECENT STAFF TABLE --}}
-        <div class="card border-0 shadow-sm">
+        {{-- STAFF TABLE --}}
+        <div class="card border-0 shadow-sm mb-4">
             <div class="card-header" style="background: #f7dce8; border: none; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #a04070;">RECENT STAFF</strong>
-                <a href="/users" class="btn btn-sm text-white" style="background: #d4608a;">
-                    <i class="bi bi-people"></i> View All
+                <strong style="color: #a04070;">ALL STAFF MEMBERS</strong>
+                <a href="/admin/users" class="btn btn-sm text-white" style="background: #d4608a;">
+                    <i class="bi bi-plus-lg"></i> Manage Staff
                 </a>
             </div>
             <div class="table-responsive">
@@ -141,7 +108,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($users->take(5) as $user)
+                        @forelse($users as $user)
                         <tr>
                             <td>#{{ $user->id }}</td>
                             <td><strong>{{ $user->name }}</strong></td>
@@ -165,49 +132,4 @@
 
     </div>{{-- end main content --}}
 </div>
-
-<script>
-    // Staff Chart
-    const staffCtx = document.getElementById('staffChart').getContext('2d');
-    new Chart(staffCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Staff Members', 'Available Slots'],
-            datasets: [{
-                data: [{{ $users->count() }}, Math.max(0, 20 - {{ $users->count() }})],
-                backgroundColor: ['#d4608a', '#f3c9d9'],
-                borderColor: ['#fff', '#fff'],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
-
-    // Projects Chart
-    const projectCtx = document.getElementById('projectChart').getContext('2d');
-    new Chart(projectCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Active', 'Completed', 'On Hold'],
-            datasets: [{
-                label: 'Projects',
-                data: [
-                    {{ $projects->where('status', 'active')->count() }},
-                    {{ $projects->where('status', 'completed')->count() }},
-                    {{ $projects->where('status', 'hold')->count() }}
-                ],
-                backgroundColor: ['#d4608a', '#a04070', '#f3c9d9'],
-                borderRadius: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
-</script>
 @endsection
